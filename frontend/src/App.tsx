@@ -1,48 +1,83 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import Navbar from "./components/Navbar";
+import AuthLayout from "./layouts/AuthLayout";
+
 import Footer from "./components/Footer";
+import Navbar from "./components/Navbar";
 
 import Home from "./pages/Home";
 import HowItWorks from "./pages/HowItWorks";
 import Safety from "./pages/Safety";
 import About from "./pages/About";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
-function App() {
+function NotFound() {
   return (
-    <BrowserRouter>
-      <div className="app">
-        <Navbar />
-
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/how-it-works" element={<HowItWorks />} />
-            <Route path="/safety" element={<Safety />} />
-            <Route path="/about" element={<About />} />
-
-            <Route
-              path="*"
-              element={
-                <div className="not-found">
-                  <div>
-                    <span className="not-found-code">404</span>
-                    <h1>Page not found</h1>
-                    <p>
-                      The page you're looking for doesn't exist or has been
-                      moved.
-                    </p>
-                  </div>
-                </div>
-              }
-            />
-          </Routes>
-        </main>
-
-        <Footer />
-      </div>
-    </BrowserRouter>
+    <div className="not-found-page">
+      <h1>404</h1>
+      <p>The page you're looking for doesn't exist.</p>
+    </div>
   );
 }
 
-export default App;
+function PublicLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <Navbar />
+      {children}
+      <Footer />
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <PublicLayout>
+              <Home />
+            </PublicLayout>
+          }
+        />
+
+        <Route
+          path="/how-it-works"
+          element={
+            <PublicLayout>
+              <HowItWorks />
+            </PublicLayout>
+          }
+        />
+
+        <Route
+          path="/safety"
+          element={
+            <PublicLayout>
+              <Safety />
+            </PublicLayout>
+          }
+        />
+
+        <Route
+          path="/about"
+          element={
+            <PublicLayout>
+              <About />
+            </PublicLayout>
+          }
+        />
+
+        <Route element={<AuthLayout />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Route>
+
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}

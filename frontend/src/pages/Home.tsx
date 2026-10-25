@@ -139,19 +139,7 @@ const Home = () => {
                 "scam".
               </div>
             </div>
-
-            <div className="floating-result">
-              <div className="floating-result-icon">
-                <ShieldAlert size={19} />
-              </div>
-
-              <div>
-                <span>Example analysis</span>
-                <strong>High risk detected</strong>
-              </div>
-
-              <div className="floating-score">87</div>
-            </div>
+            
           </div>
         </div>
       </section>
