@@ -11,6 +11,7 @@ import Safety from "./pages/Safety";
 import About from "./pages/About";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Scan from "./pages/Scan";
 
 function NotFound() {
   return (
@@ -75,6 +76,15 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Route>
+
+        <Route
+          path="/scan"
+          element={
+            <PublicLayout>
+              <Scan />
+            </PublicLayout>
+          }
+        />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
