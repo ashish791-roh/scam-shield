@@ -8,24 +8,43 @@ import {
   Mail,
   ShieldCheck,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const handleSubmit = async (
+    event: FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
 
     setError("");
     setLoading(true);
 
-    // Temporary frontend-only authentication.
-    // This will be connected to the Node/Express backend later.
-    await new Promise((resolve) => setTimeout(resolve, 900));
+    const formData = new FormData(event.currentTarget);
 
-    setLoading(false);
+    const email = String(formData.get("email") || "").trim();
+    const password = String(formData.get("password") || "");
+
+    try {
+      await login(email, password);
+
+      navigate("/scan", { replace: true });
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Unable to sign in. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -36,10 +55,17 @@ export default function Login() {
 
       <div className="auth-card-heading">
         <h1>Welcome back</h1>
-        <p>Sign in to continue protecting yourself from digital scams.</p>
+        <p>
+          Sign in to continue protecting yourself from
+          digital scams.
+        </p>
       </div>
 
-      {error && <div className="auth-error">{error}</div>}
+      {error && (
+        <div className="auth-error" role="alert">
+          {error}
+        </div>
+      )}
 
       <form className="auth-form" onSubmit={handleSubmit}>
         <div className="form-field">
@@ -66,7 +92,11 @@ export default function Login() {
             <button
               type="button"
               className="forgot-password"
-              onClick={() => setError("Password recovery will be available soon.")}
+              onClick={() =>
+                setError(
+                  "Password recovery will be available soon."
+                )
+              }
             >
               Forgot password?
             </button>
@@ -87,15 +117,27 @@ export default function Login() {
             <button
               type="button"
               className="password-toggle"
-              onClick={() => setShowPassword((current) => !current)}
-              aria-label={showPassword ? "Hide password" : "Show password"}
+              onClick={() =>
+                setShowPassword((current) => !current)
+              }
+              aria-label={
+                showPassword ? "Hide password" : "Show password"
+              }
             >
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              {showPassword ? (
+                <EyeOff size={18} />
+              ) : (
+                <Eye size={18} />
+              )}
             </button>
           </div>
         </div>
 
-        <button className="auth-submit" type="submit" disabled={loading}>
+        <button
+          className="auth-submit"
+          type="submit"
+          disabled={loading}
+        >
           {loading ? (
             <>
               <span className="auth-spinner" />

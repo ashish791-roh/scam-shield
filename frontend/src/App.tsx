@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
 
 import AuthLayout from "./layouts/AuthLayout";
 
@@ -34,6 +35,7 @@ function PublicLayout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
+    <AuthProvider>
     <BrowserRouter>
       <Routes>
         <Route
@@ -89,5 +91,6 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
+    </AuthProvider>
   );
 }
