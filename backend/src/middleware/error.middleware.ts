@@ -1,17 +1,15 @@
+
 import {
   Request,
   Response,
   NextFunction,
-  ErrorRequestHandler
+  ErrorRequestHandler,
 } from "express";
 
-export const notFound = (
-  req: Request,
-  res: Response
-) => {
+export const notFound = (req: Request, res: Response) => {
   return res.status(404).json({
     success: false,
-    message: `Route not found: ${req.method} ${req.originalUrl}`
+    message: `Route not found: ${req.method} ${req.originalUrl}`,
   });
 };
 
@@ -23,20 +21,33 @@ export const errorHandler: ErrorRequestHandler = (
 ) => {
   console.error("API Error:", error);
 
-  if (error.code === 11000) {
+  // Handle MongoDB duplicate-key errors
+  if (error?.code === 11000) {
     return res.status(409).json({
       success: false,
-      message: "An account with this email already exists"
+      message: "A record with these details already exists",
     });
   }
 
-  const statusCode = error.status || 500;
+  // Accept only valid HTTP error status codes
+  const requestedStatus = Number(error?.status || error?.statusCode);
+
+  const statusCode =
+    Number.isInteger(requestedStatus) &&
+    requestedStatus >= 400 &&
+    requestedStatus <= 599
+      ? requestedStatus
+      : 500;
+
+  const isServerError = statusCode >= 500;
+
+  const message =
+    process.env.NODE_ENV === "production" && isServerError
+      ? "Internal server error"
+      : error?.message || "Something went wrong";
 
   return res.status(statusCode).json({
     success: false,
-    message:
-      process.env.NODE_ENV === "production"
-        ? "Internal server error"
-        : error.message || "Something went wrong"
+    message,
   });
 };

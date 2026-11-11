@@ -15,7 +15,12 @@ const createToken = (userId: string): string => {
   const expiresIn =
     (process.env.JWT_EXPIRES_IN || "1d") as jwt.SignOptions["expiresIn"];
 
-  return jwt.sign({ userId }, secret, { expiresIn });
+  return jwt.sign(
+    { userId }, 
+    secret, 
+    { expiresIn,
+      algorithm: "HS256",
+     });
 };
 
 export const register = async (
@@ -114,6 +119,7 @@ export const login = async (
   }
 };
 
+
 export const getMe = async (
   req: AuthRequest,
   res: Response,
@@ -133,7 +139,12 @@ export const getMe = async (
 
     return res.status(200).json({
       success: true,
-      user
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt
+      }
     });
   } catch (error) {
     next(error);

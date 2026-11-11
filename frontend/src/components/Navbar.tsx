@@ -7,17 +7,29 @@ import {
   ArrowRight,
 } from "lucide-react";
 
+import { useAuth } from "../context/AuthContext";
+
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user, loading, logout } = useAuth();
 
-  const closeMobile = () => {
-    setMobileOpen(false);
+  const closeMobile = () => setMobileOpen(false);
+
+  const handleLogout = () => {
+    logout();
+    closeMobile();
+    window.location.replace("/");
   };
+
+  const showLogout = !loading && !!user;
+
+  const navClass = ({ isActive }: { isActive: boolean }) =>
+    isActive ? "nav-link active" : "nav-link";
 
   return (
     <header className="navbar">
       <div className="container navbar-inner">
-        <Link to="/" className="brand" onClick={closeMobile}>
+        <Link to="/" className="brand" onClick={closeMobile} aria-label="ScamShield home">
           <div className="brand-icon">
             <ShieldCheck size={23} strokeWidth={2.4} />
           </div>
@@ -28,41 +40,33 @@ const Navbar = () => {
           </div>
         </Link>
 
-        <nav className={`nav-links ${mobileOpen ? "mobile-open" : ""}`}>
-          <NavLink
-            to="/how-it-works"
-            className={({ isActive }) =>
-              isActive ? "nav-link active" : "nav-link"
-            }
-            onClick={closeMobile}
-          >
+        <nav
+          id="main-navigation"
+          className={`nav-links ${mobileOpen ? "mobile-open" : ""}`}
+          aria-label="Main navigation"
+        >
+          <NavLink to="/how-it-works" className={navClass} onClick={closeMobile}>
             How it works
           </NavLink>
 
-          <NavLink
-            to="/safety"
-            className={({ isActive }) =>
-              isActive ? "nav-link active" : "nav-link"
-            }
-            onClick={closeMobile}
-          >
+          <NavLink to="/safety" className={navClass} onClick={closeMobile}>
             Safety
           </NavLink>
 
-          <NavLink
-            to="/about"
-            className={({ isActive }) =>
-              isActive ? "nav-link active" : "nav-link"
-            }
-            onClick={closeMobile}
-          >
+          <NavLink to="/about" className={navClass} onClick={closeMobile}>
             About
           </NavLink>
 
           <div className="mobile-nav-actions">
-            <Link to="/login" className="nav-login" onClick={closeMobile}>
-              Log in
-            </Link>
+            {showLogout ? (
+              <button type="button" className="nav-login" onClick={handleLogout}>
+                Log out
+              </button>
+            ) : (
+              <Link to="/login" className="nav-login" onClick={closeMobile}>
+                Log in
+              </Link>
+            )}
 
             <Link to="/scan" className="btn btn-primary" onClick={closeMobile}>
               Check something
@@ -72,9 +76,15 @@ const Navbar = () => {
         </nav>
 
         <div className="desktop-actions">
-          <Link to="/login" className="nav-login">
-            Log in
-          </Link>
+          {showLogout ? (
+            <button type="button" className="nav-login" onClick={handleLogout}>
+              Log out
+            </button>
+          ) : (
+            <Link to="/login" className="nav-login">
+              Log in
+            </Link>
+          )}
 
           <Link to="/scan" className="btn btn-primary">
             Check something
@@ -83,11 +93,14 @@ const Navbar = () => {
         </div>
 
         <button
+          type="button"
           className="mobile-menu-btn"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label="Toggle navigation"
+          onClick={() => setMobileOpen((open) => !open)}
+          aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
+          aria-expanded={mobileOpen}
+          aria-controls="main-navigation"
         >
-          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+          {mobileOpen ? <X size={23} /> : <Menu size={23} />}
         </button>
       </div>
     </header>

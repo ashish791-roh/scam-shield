@@ -1,4 +1,13 @@
+
 import { z } from "zod";
+
+const passwordSchema = z
+  .string()
+  .min(8, "Password must contain at least 8 characters")
+  .refine(
+    (password) => Buffer.byteLength(password, "utf8") <= 72,
+    "Password cannot exceed 72 bytes"
+  );
 
 export const registerSchema = z.object({
   name: z
@@ -11,13 +20,10 @@ export const registerSchema = z.object({
     .string()
     .trim()
     .email("Please enter a valid email address")
-    .max(254)
+    .max(254, "Email cannot exceed 254 characters")
     .transform((value) => value.toLowerCase()),
 
-  password: z
-    .string()
-    .min(8, "Password must contain at least 8 characters")
-    .max(72, "Password cannot exceed 72 characters")
+  password: passwordSchema,
 });
 
 export const loginSchema = z.object({
@@ -25,11 +31,8 @@ export const loginSchema = z.object({
     .string()
     .trim()
     .email("Please enter a valid email address")
-    .max(254)
+    .max(254, "Email cannot exceed 254 characters")
     .transform((value) => value.toLowerCase()),
 
-  password: z
-    .string()
-    .min(8)
-    .max(72)
+  password: passwordSchema,
 });

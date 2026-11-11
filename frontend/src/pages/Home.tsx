@@ -1,3 +1,4 @@
+
 import {
   ArrowRight,
   CheckCircle2,
@@ -20,48 +21,102 @@ const scanTypes = [
   {
     icon: MessageSquare,
     title: "Messages",
-    description: "Check suspicious SMS, WhatsApp or social messages.",
+    description: "Check suspicious SMS, WhatsApp and social media messages.",
   },
   {
     icon: Link2,
     title: "URLs",
-    description: "Inspect links before you open or trust them.",
+    description: "Inspect unfamiliar links before opening them.",
   },
   {
     icon: Mail,
     title: "Emails",
-    description: "Spot phishing attempts and impersonation.",
+    description: "Recognize phishing attempts and email impersonation.",
   },
   {
     icon: BriefcaseBusiness,
     title: "Job offers",
-    description: "Identify suspicious recruitment and payment requests.",
+    description: "Identify fake recruitment and suspicious payment requests.",
   },
   {
     icon: ShoppingBag,
     title: "Marketplace",
-    description: "Check suspicious buying and selling offers.",
+    description: "Evaluate questionable buying and selling offers.",
   },
   {
     icon: Phone,
     title: "Phone numbers",
-    description: "Look for reported or suspicious numbers.",
+    description: "Review suspicious numbers before responding.",
+  },
+];
+
+const trustPoints = [
+  "Understandable results",
+  "Multiple risk indicators",
+  "Practical safety guidance",
+];
+
+const processSteps = [
+  {
+    number: "01",
+    icon: ScanSearch,
+    title: "Submit",
+    description:
+      "Paste the suspicious message, link, email or offer you want to check.",
+  },
+  {
+    number: "02",
+    icon: Sparkles,
+    title: "Analyze",
+    description:
+      "ScamShield examines the content for suspicious patterns and warning signs.",
+  },
+  {
+    number: "03",
+    icon: ShieldAlert,
+    title: "Understand",
+    description:
+      "Review the risk level, explanations and recommended next steps.",
+  },
+];
+
+const findings = [
+  {
+    icon: ShieldAlert,
+    title: "Urgency pressure",
+    description: "The message pressures you to act immediately.",
+    score: "+20",
+    type: "danger",
+  },
+  {
+    icon: LockKeyhole,
+    title: "Sensitive information",
+    description: "It appears to request information that should remain private.",
+    score: "+25",
+    type: "warning",
+  },
+  {
+    icon: Link2,
+    title: "Suspicious link",
+    description: "The included link may not belong to the claimed organization.",
+    score: "+22",
+    type: "danger",
   },
 ];
 
 const Home = () => {
   return (
-    <div>
-      {/* HERO */}
+    <main>
+      {/* HERO SECTION */}
       <section className="hero">
-        <div className="hero-glow hero-glow-one" />
-        <div className="hero-glow hero-glow-two" />
+        <div className="hero-glow hero-glow-one" aria-hidden="true" />
+        <div className="hero-glow hero-glow-two" aria-hidden="true" />
 
         <div className="container hero-grid">
           <div className="hero-content">
             <div className="eyebrow">
               <span className="eyebrow-dot" />
-              Digital safety, explained
+              Your everyday digital safety companion
             </div>
 
             <h1>
@@ -70,9 +125,11 @@ const Home = () => {
             </h1>
 
             <p className="hero-description">
-              ScamShield helps you understand suspicious messages,
-              links, emails and offers before they cost you money,
-              information or access to your accounts.
+              Suspicious message? Unexpected payment request? A job offer
+              that sounds too good to be true?
+
+              ScamShield helps you identify warning signs and understand
+              potential online threats before making a decision.
             </p>
 
             <div className="hero-actions">
@@ -82,26 +139,18 @@ const Home = () => {
               </Link>
 
               <Link to="/how-it-works" className="text-link">
-                See how it works
+                Discover how it works
                 <ChevronRight size={17} />
               </Link>
             </div>
 
             <div className="hero-trust">
-              <div className="trust-item">
-                <CheckCircle2 size={17} />
-                Explainable results
-              </div>
-
-              <div className="trust-item">
-                <CheckCircle2 size={17} />
-                Multiple scam signals
-              </div>
-
-              <div className="trust-item">
-                <CheckCircle2 size={17} />
-                Built for everyday users
-              </div>
+              {trustPoints.map((point) => (
+                <div className="trust-item" key={point}>
+                  <CheckCircle2 size={17} />
+                  {point}
+                </div>
+              ))}
             </div>
           </div>
 
@@ -110,20 +159,20 @@ const Home = () => {
             <div className="scanner-card">
               <div className="scanner-card-header">
                 <div>
-                  <span className="scanner-label">Quick check</span>
+                  <span className="scanner-label">SCAMSHIELD / QUICK CHECK</span>
                   <h2>What looks suspicious?</h2>
                 </div>
 
                 <div className="scanner-secure-icon">
-                  <LockKeyhole size={18} />
+                  <LockKeyhole size={19} />
                 </div>
               </div>
 
               <div className="scanner-input">
                 <div className="scanner-input-placeholder">
-                  <ScanSearch size={19} />
+                  <ScanSearch size={20} />
                   <span>
-                    Paste a message, URL or suspicious content...
+                    Paste a suspicious message, URL or offer...
                   </span>
                 </div>
               </div>
@@ -134,22 +183,26 @@ const Home = () => {
               </Link>
 
               <div className="scanner-note">
-                <ShieldAlert size={15} />
-                We explain the warning signs instead of just saying
-                "scam".
+                <ShieldAlert size={16} />
+                Understand warning signs before taking action.
+              </div>
+
+              <div className="hero-preview-foot">
+                <span className="hero-preview-pulse" />
+                <span>Think before you click.</span>
+                <span className="hero-preview-mark">SS / 01</span>
               </div>
             </div>
-            
           </div>
         </div>
       </section>
 
-      {/* SCAN TYPES */}
+      {/* SCAN CATEGORIES */}
       <section className="section">
         <div className="container">
           <div className="section-heading centered">
             <div className="section-eyebrow">
-              What can you check?
+              WHAT CAN YOU CHECK?
             </div>
 
             <h2>
@@ -158,8 +211,8 @@ const Home = () => {
             </h2>
 
             <p>
-              ScamShield is designed around the situations people
-              actually encounter every day.
+              From suspicious messages to questionable job offers,
+              get a clearer understanding of the risks you encounter online.
             </p>
           </div>
 
@@ -168,9 +221,14 @@ const Home = () => {
               const Icon = item.icon;
 
               return (
-                <Link to="/scan" className="scan-type-card" key={item.title}>
+                <Link
+                  to="/scan"
+                  className="scan-type-card"
+                  key={item.title}
+                  aria-label={`Check suspicious ${item.title.toLowerCase()}`}
+                >
                   <div className="scan-type-icon">
-                    <Icon size={21} />
+                    <Icon size={22} />
                   </div>
 
                   <h3>{item.title}</h3>
@@ -192,7 +250,9 @@ const Home = () => {
       <section className="section section-dark">
         <div className="container">
           <div className="section-heading centered">
-            <div className="section-eyebrow">Simple by design</div>
+            <div className="section-eyebrow">
+              SIMPLE BY DESIGN
+            </div>
 
             <h2>
               From suspicious to
@@ -200,59 +260,35 @@ const Home = () => {
             </h2>
 
             <p>
-              You don't need to be a cybersecurity expert to
-              understand why something might be dangerous.
+              Staying safer online shouldn't require a cybersecurity
+              background. The process is straightforward.
             </p>
           </div>
 
           <div className="process-grid">
-            <div className="process-card">
-              <div className="process-number">01</div>
+            {processSteps.map((step, index) => {
+              const Icon = step.icon;
 
-              <div className="process-icon">
-                <ScanSearch size={22} />
-              </div>
+              return (
+                <div className="process-card" key={step.number}>
+                  <div className="process-number">
+                    {step.number}
+                  </div>
 
-              <h3>Submit</h3>
+                  <div className="process-icon">
+                    <Icon size={23} />
+                  </div>
 
-              <p>
-                Paste or enter the suspicious content you received.
-              </p>
-            </div>
+                  <h3>{step.title}</h3>
 
-            <div className="process-line" />
+                  <p>{step.description}</p>
 
-            <div className="process-card">
-              <div className="process-number">02</div>
-
-              <div className="process-icon">
-                <Sparkles size={22} />
-              </div>
-
-              <h3>Analyze</h3>
-
-              <p>
-                ScamShield checks multiple warning signs and risk
-                signals.
-              </p>
-            </div>
-
-            <div className="process-line" />
-
-            <div className="process-card">
-              <div className="process-number">03</div>
-
-              <div className="process-icon">
-                <ShieldAlert size={22} />
-              </div>
-
-              <h3>Understand</h3>
-
-              <p>
-                See the risk level, reasons and what you should do
-                next.
-              </p>
-            </div>
+                  {index !== processSteps.length - 1 && (
+                    <div className="process-line" aria-hidden="true" />
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -261,148 +297,149 @@ const Home = () => {
       <section className="section">
         <div className="container result-preview-grid">
           <div className="result-preview-content">
-            <div className="section-eyebrow">More than a verdict</div>
+            <div className="section-eyebrow">
+              MORE THAN A VERDICT
+            </div>
 
             <h2>
               Know <span>why</span> something feels wrong.
             </h2>
 
             <p>
-              A simple "scam" label isn't enough. ScamShield breaks
-              suspicious content into understandable signals so you
-              can make a safer decision.
+              A simple scam label isn't enough. You deserve to understand
+              what makes something suspicious and what you should do next.
             </p>
 
             <ul className="feature-list">
               <li>
                 <CheckCircle2 size={19} />
-                Risk score from multiple signals
+                Risk score based on detected signals
               </li>
 
               <li>
                 <CheckCircle2 size={19} />
-                Clear explanations for every warning
+                Clear explanations for warning signs
               </li>
 
               <li>
                 <CheckCircle2 size={19} />
-                Practical recommendations
+                Practical safety recommendations
               </li>
 
               <li>
                 <CheckCircle2 size={19} />
-                Option to report suspicious content
+                Actionable next steps
               </li>
             </ul>
 
             <Link to="/how-it-works" className="text-link">
-              Learn about our analysis
+              Explore the analysis process
               <ArrowRight size={17} />
             </Link>
           </div>
 
-          <div className="result-card">
-            <div className="result-card-top">
-              <div>
-                <span className="result-label">Example result</span>
-                <h3>Suspicious message</h3>
-              </div>
+          {/* SAMPLE ANALYSIS CARD */}
+          
+{/* SAMPLE ANALYSIS CARD */}
+    <div className="result-card result-card-polished">
+     <div className="result-card-top">
+       <div>
+          <span className="result-label">ILLUSTRATIVE EXAMPLE</span>
+         <h3>Suspicious message</h3>
+       </div>
 
-              <div className="risk-pill high">
-                HIGH RISK
-              </div>
-            </div>
+    <div className="risk-pill high">
+      <span className="risk-status-dot" />
+      HIGH RISK
+    </div>
+  </div>
 
-            <div className="risk-score-row">
-              <div className="risk-score">
-                <strong>87</strong>
-                <span>/ 100</span>
-              </div>
+  <div className="risk-overview">
+    <div className="risk-score">
+      <strong>87</strong>
+      <span>/ 100</span>
+    </div>
 
-              <div className="risk-description">
-                <span>Risk level</span>
-                <strong>High</strong>
-              </div>
-            </div>
+    <div className="risk-overview-details">
+      <span>Overall risk assessment</span>
+      <strong>High risk detected</strong>
+      <small>Multiple suspicious indicators found</small>
+    </div>
+  </div>
 
-            <div className="risk-bar">
-              <div className="risk-bar-fill" />
-            </div>
+  <div className="risk-progress">
+    <div className="risk-progress-track">
+      <div className="risk-progress-fill" />
+    </div>
+    <div className="risk-progress-labels">
+      <span>LOW</span>
+      <span>MEDIUM</span>
+      <span>HIGH</span>
+    </div>
+  </div>
 
-            <div className="finding">
-              <div className="finding-icon danger">
-                <ShieldAlert size={17} />
-              </div>
+  <div className="risk-findings">
+    <div className="risk-findings-heading">
+      <span>DETECTED WARNING SIGNS</span>
+      <span>03 signals</span>
+    </div>
 
-              <div>
-                <strong>Urgency pressure</strong>
-                <p>
-                  The message pressures you to act immediately.
-                </p>
-              </div>
+    {findings.map((finding) => {
+      const Icon = finding.icon;
 
-              <span>+20</span>
-            </div>
-
-            <div className="finding">
-              <div className="finding-icon warning">
-                <LockKeyhole size={17} />
-              </div>
-
-              <div>
-                <strong>Sensitive information</strong>
-                <p>
-                  It appears to request information that should remain
-                  private.
-                </p>
-              </div>
-
-              <span>+25</span>
-            </div>
-
-            <div className="finding">
-              <div className="finding-icon danger">
-                <Link2 size={17} />
-              </div>
-
-              <div>
-                <strong>Suspicious link</strong>
-                <p>
-                  The included link may not belong to the claimed
-                  organization.
-                </p>
-              </div>
-
-              <span>+22</span>
-            </div>
-
-            <div className="recommendation">
-              <strong>Recommended action</strong>
-              <p>
-                Don't click the link or share sensitive information.
-                Verify the sender through an official channel.
-              </p>
-            </div>
+      return (
+        <div className="risk-finding-row" key={finding.title}>
+          <div className={`risk-finding-icon ${finding.type}`}>
+            <Icon size={17} />
           </div>
+
+          <div className="risk-finding-content">
+            <strong>{finding.title}</strong>
+            <p>{finding.description}</p>
+          </div>
+
+          <span className="risk-finding-score">{finding.score}</span>
         </div>
+      );
+    })}
+  </div>
+
+  <div className="risk-recommendation">
+    <div className="risk-recommendation-icon">
+      <ShieldAlert size={18} />
+    </div>
+
+    <div>
+      <strong>What should you do?</strong>
+      <p>
+        Don't click the link or share sensitive information.
+        Verify the sender through an official channel.
+      </p>
+    </div>
+  </div>
+</div>
+
+  </div>
       </section>
 
-      {/* CTA */}
+      {/* FINAL CTA */}
       <section className="cta-section">
         <div className="container">
           <div className="cta-card">
             <div className="cta-icon">
-              <ShieldCheckIcon />
+              <div className="shield-check-icon">
+                <ShieldAlert size={29} />
+              </div>
             </div>
 
             <div className="cta-content">
-              <span>Something doesn't feel right?</span>
+              <span>WHEN SOMETHING DOESN'T FEEL RIGHT</span>
 
-              <h2>Check it before you trust it.</h2>
+              <h2>Pause. Check. Then decide.</h2>
 
               <p>
-                A few seconds of checking can prevent a costly
-                mistake.
+                Make informed decisions before trusting suspicious
+                digital interactions.
               </p>
             </div>
 
@@ -413,15 +450,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-    </div>
-  );
-};
-
-const ShieldCheckIcon = () => {
-  return (
-    <div className="shield-check-icon">
-      <ShieldAlert size={28} />
-    </div>
+    </main>
   );
 };
 

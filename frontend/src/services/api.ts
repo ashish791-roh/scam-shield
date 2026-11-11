@@ -61,3 +61,95 @@ export const authAPI = {
     );
   },
 };
+
+export type ScanType =
+  | "message"
+  | "url"
+  | "email"
+  | "phone"
+  | "job"
+  | "marketplace";
+
+export interface ScanSignal {
+  id: string;
+  title: string;
+  description: string;
+  severity: "low" | "medium" | "high";
+  points: number;
+}
+
+export interface ScanAnalysis {
+  type: ScanType;
+  riskScore: number;
+  riskLevel: "low" | "medium" | "high";
+  verdict: string;
+  signals: ScanSignal[];
+  recommendations: string[];
+  limitations: string[];
+  analyzedAt: string;
+}
+
+interface ScanResponse {
+  success: boolean;
+  message: string;
+  analysis: ScanAnalysis;
+}
+
+export const scanAPI = {
+  analyze(type: ScanType, content: string, token: string) {
+    return request<ScanResponse>(
+      "/scans",
+      {
+        method: "POST",
+        body: JSON.stringify({ type, content }),
+      },
+      token
+    );
+  },
+};
+
+
+export interface SubmissionResponse {
+  success: boolean;
+  message: string;
+}
+
+export type ScamReportType =
+  | "message"
+  | "url"
+  | "email"
+  | "phone"
+  | "job"
+  | "marketplace"
+  | "other";
+
+export interface ContactSubmission {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+export interface ScamReportSubmission {
+  type: ScamReportType;
+  suspiciousContent: string;
+  description: string;
+  reporterName?: string;
+  reporterEmail?: string;
+}
+
+export const submissionAPI = {
+  contact(data: ContactSubmission) {
+    return request<SubmissionResponse>("/submissions/contact", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  report(data: ScamReportSubmission) {
+    return request<SubmissionResponse>("/submissions/reports", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+};

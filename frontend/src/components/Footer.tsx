@@ -52,7 +52,7 @@ const Footer = () => {
             <Link to="/reports">Report a scam</Link>
 
             <a
-              href="https://github.com"
+              href="https://github.com/ashish791-roh/scam-shield"
               target="_blank"
               rel="noreferrer"
             >
